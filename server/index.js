@@ -10,6 +10,7 @@ const emailRoutes = require('./routes/emailRoutes');
 const knowledgeRoutes = require('./routes/knowledgeRoutes');
 const configRoutes = require('./routes/configRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
+const pollingService = require('./services/pollingService');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -46,6 +47,8 @@ mongoose.connect(MONGO_URI)
         console.log('✅ Connected to MongoDB');
         app.listen(PORT, () => {
             console.log(`🚀 Server running on http://localhost:${PORT}`);
+            // Start background polling for all configured clients
+            pollingService.startAll();
         });
     })
     .catch((err) => {

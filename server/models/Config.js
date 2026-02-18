@@ -21,7 +21,13 @@ const configSchema = new mongoose.Schema({
     openaiApiKey: { type: String, default: '' },
     // Auto-action settings
     autoSendAboveThreshold: { type: Boolean, default: false },
-    autoEscalateBelowThreshold: { type: Boolean, default: true }
+    autoEscalateBelowThreshold: { type: Boolean, default: true },
+    // Polling settings
+    pollingEnabled: { type: Boolean, default: false },
+    pollingIntervalMinutes: { type: Number, default: 5, min: 1, max: 60 },
+    autoProcessEnabled: { type: Boolean, default: true },
+    // Timestamp for incremental fetch — set on first activation, only fetch emails after this
+    lastFetchedAt: { type: Date, default: null }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Config', configSchema);

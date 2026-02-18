@@ -56,6 +56,10 @@ export interface Config {
     openaiApiKey: string;
     autoSendAboveThreshold: boolean;
     autoEscalateBelowThreshold: boolean;
+    pollingEnabled: boolean;
+    pollingIntervalMinutes: number;
+    autoProcessEnabled: boolean;
+    lastFetchedAt: string | null;
 }
 
 export interface Action {

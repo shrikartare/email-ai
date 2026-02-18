@@ -1,4 +1,5 @@
 const Config = require('../models/Config');
+const pollingService = require('../services/pollingService');
 
 exports.getConfig = async (req, res) => {
     try {
@@ -31,6 +32,14 @@ exports.updateConfig = async (req, res) => {
             updates,
             { new: true, upsert: true }
         );
+
+        // Restart or stop polling based on updated config
+        if (config.pollingEnabled) {
+            pollingService.startPollingForClient(req.clientId, config);
+        } else {
+            pollingService.stopPollingForClient(req.clientId);
+        }
+
         res.json(config);
     } catch (err) {
         res.status(500).json({ error: err.message });

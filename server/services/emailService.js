@@ -4,7 +4,12 @@ const Config = require('../models/Config');
 const Email = require('../models/Email');
 
 class EmailService {
-    async fetchEmails(clientId) {
+    /**
+     * Fetch emails from IMAP.
+     * @param {string} clientId
+     * @param {Date|null} sinceDate — if provided, only fetch emails arriving after this date
+     */
+    async fetchEmails(clientId, sinceDate = null) {
         const config = await Config.findOne({ clientId });
         if (!config || !config.imapHost || !config.imapUser) {
             // Return mock data if no IMAP config
@@ -37,6 +42,11 @@ class EmailService {
                         searchCriteria = ['SEEN'];
                     } else {
                         searchCriteria = ['ALL'];
+                    }
+
+                    // If sinceDate provided, only fetch emails after that timestamp
+                    if (sinceDate) {
+                        searchCriteria.push(['SINCE', sinceDate]);
                     }
 
                     imap.search(searchCriteria, (err, results) => {

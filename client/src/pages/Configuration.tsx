@@ -130,6 +130,43 @@ const Configuration = () => {
                 </div>
             </div>
 
+            {/* Polling & Auto-Processing */}
+            <div className="card section">
+                <h3 className="section-title">Polling & Auto-Processing</h3>
+                <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 16 }}>
+                    When enabled, the server automatically checks for new emails and processes them with AI.
+                    On first activation, only the current timestamp is recorded — existing emails are not fetched.
+                </p>
+                <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+                    <div className="toggle-wrapper">
+                        <div className={`toggle ${config.pollingEnabled ? 'active' : ''}`} onClick={() => update('pollingEnabled', !config.pollingEnabled)} />
+                        <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Enable Polling</span>
+                    </div>
+                    <div className="toggle-wrapper">
+                        <div className={`toggle ${config.autoProcessEnabled ? 'active' : ''}`} onClick={() => update('autoProcessEnabled', !config.autoProcessEnabled)} />
+                        <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Auto-process with AI</span>
+                    </div>
+                </div>
+                {config.pollingEnabled && (
+                    <div className="form-group" style={{ marginTop: 16, maxWidth: 200 }}>
+                        <label>Polling Interval (minutes)</label>
+                        <input
+                            className="form-input"
+                            type="number"
+                            min={1}
+                            max={60}
+                            value={config.pollingIntervalMinutes}
+                            onChange={(e) => update('pollingIntervalMinutes', Number(e.target.value))}
+                        />
+                    </div>
+                )}
+                {config.lastFetchedAt && (
+                    <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 12 }}>
+                        Last fetched: {new Date(config.lastFetchedAt).toLocaleString()}
+                    </p>
+                )}
+            </div>
+
             {/* LLM Settings */}
             <div className="card section">
                 <h3 className="section-title">LLM Settings</h3>
